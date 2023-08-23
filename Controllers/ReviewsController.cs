@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Products_ReviewsAPI.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +9,7 @@ namespace Products_ReviewsAPI.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
+
         // GET: api/<ReviewsController>
         [HttpGet]
         public IEnumerable<string> Get()

@@ -37,7 +37,7 @@ namespace Products_ReviewsAPI.Controllers
         {
             _context.Products.Add(product);
             _context.SaveChanges();
-            return Ok(product);
+            return StatusCode(201,product);
         }
 
         // PUT api/<ProductsController>/5
