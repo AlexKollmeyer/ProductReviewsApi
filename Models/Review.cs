@@ -10,8 +10,8 @@ namespace Products_ReviewsAPI.Models
         public string Text { get; set; }
         public int Rating { get; set; }
 
-        //[ForeignKey ("Product")]
-        //public int ProductId { get; set; }
-        //public Product Product { get; set; } //Nav property
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+        public Product Product { get; set; } //Nav property
     }
 }
