@@ -19,9 +19,11 @@ namespace Products_ReviewsAPI.Controllers
 
         // GET: api/<ProductsController>
         [HttpGet]
-        public IEnumerable<string> GetAll()
+        public IActionResult GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var products = _context.Products.ToList();
+
+            return Ok(products);
         }
 
         // GET api/<ProductsController>/5
