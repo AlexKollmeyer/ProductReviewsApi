@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Products_ReviewsAPI.Data;
+using Products_ReviewsAPI.DTOs;
 using Products_ReviewsAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,24 +20,38 @@ namespace Products_ReviewsAPI.Controllers
 
         // GET: api/<ProductsController>
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int ? maxPrice)
         {
-            var products = _context.Products.ToList();
+            if (maxPrice == null)
+            {
+                var products = _context.Products.ToList();
+                return Ok(products);
+            }
+            else if(maxPrice != null)
+            {
+                var products = _context.Products.Where(p => p.Price <= maxPrice).ToList();
+                return Ok(products);
+            }
+            return BadRequest();
 
-            return Ok(products);
         }
 
         // GET api/<ProductsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetByProductId(int id)
         {
-            return "value";
+            var product = _context.Products.Where(r => r.Id == id);
+            return Ok(product);
         }
 
         // POST api/<ProductsController>
         [HttpPost]
         public IActionResult Post([FromBody] Product product)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             _context.Products.Add(product);
             _context.SaveChanges();
             return StatusCode(201,product);
@@ -44,14 +59,32 @@ namespace Products_ReviewsAPI.Controllers
 
         // PUT api/<ProductsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Product product)
         {
+            var productToUpdate = _context.Products.Find(id);
+            if (productToUpdate == null)
+            {
+                return NotFound();
+            }
+            productToUpdate.Name = product.Name;
+            productToUpdate.Price = product.Price;
+            productToUpdate.Reviews = product.Reviews;
+            _context.SaveChanges();
+            return Ok(product);
         }
+
 
         // DELETE api/<ProductsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var productToRemove = _context.Products.FirstOrDefault(m => m.Id == id);
+            if (productToRemove == null)
+                return NotFound();
+            _context.Products.Remove(productToRemove);
+            _context.SaveChanges();
+            return NoContent();
+
         }
     }
 }

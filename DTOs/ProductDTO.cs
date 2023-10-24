@@ -7,7 +7,7 @@ namespace Products_ReviewsAPI.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
-        public ICollection<Review> Reviews { get; set; } //Nav property
+        public ICollection<ReviewDTO> Reviews { get; set; } //Nav property
         public double AverageRating { get; set; }
     }
 }

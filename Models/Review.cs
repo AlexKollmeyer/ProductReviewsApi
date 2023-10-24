@@ -12,6 +12,6 @@ namespace Products_ReviewsAPI.Models
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }
-        public Product Product { get; set; } //Nav property
+        public Product? Product { get; set; } //Nav property
     }
 }

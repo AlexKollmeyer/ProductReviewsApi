@@ -22,39 +22,57 @@ namespace Products_ReviewsAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-
+            var reviews = _context.Reviews.ToList();
+            return StatusCode(200, reviews);
         }
-
-
-
-
-                
-
-        }
-
         // GET api/<ReviewsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("product/{id}")]
+        public IActionResult GetByProductId(int id)
         {
-            return "value";
+            var reviews = _context.Reviews.Where(r => r.ProductId == id);
+            return Ok(reviews);
         }
 
         // POST api/<ReviewsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Review review)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
+            return StatusCode(201, review);
         }
 
         // PUT api/<ReviewsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Review review)
         {
+            var reviewToUpdate = _context.Reviews.Find(id);
+            if(reviewToUpdate == null)
+            {
+                return NotFound();
+            }
+            reviewToUpdate.Text = review.Text;
+            reviewToUpdate.Rating = review.Rating;
+            reviewToUpdate.ProductId = review.ProductId;
+            _context.SaveChanges();
+            return Ok(review);
         }
 
         // DELETE api/<ReviewsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var reviewToRemove = _context.Reviews.FirstOrDefault(m => m.Id == id);
+            if (reviewToRemove == null)
+                return NotFound();
+            _context.Reviews.Remove(reviewToRemove);
+            _context.SaveChanges();
+            return NoContent();
+
         }
     }
 }
